@@ -1,5 +1,7 @@
 This MySQL Server contains the following:
-    - MySQL Server with the following configuration:
+   ```
+ - MySQL Server with the following configuration:
+
             -sku_name   = "B_Gen5_1"
             -storage_mb = 5120
             -version    = "5.7"
@@ -11,13 +13,15 @@ This MySQL Server contains the following:
             -public_network_access_enabled     = true
             -ssl_enforcement_enabled           = true
             -ssl_minimal_tls_version_enforced  = "TLS1_0"
-
+            
     - A database resource 
     - A firewall rule for MySQL Server
+```
 
 This module needs as prerequiste an already creadted resource group.
 
 The following variables are mandatory to be filled in:
+```
 module "mysql-module" {
 
   resource-group-name = "<name of resource group created>"
@@ -40,3 +44,4 @@ module "mysql-module" {
   firewall-end-ip   = "<end range for ip>"
 
 } //End of mysql modules
+```

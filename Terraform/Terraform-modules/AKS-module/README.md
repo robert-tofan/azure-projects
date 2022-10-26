@@ -1,14 +1,14 @@
-This AKS module contain the following resources:
-    - Azure Kubernetes Cluster
-    - Azure Container Registry 
-    - Helm chart for Nginx ingress controller
-    - Helm chart for Cert Manager
+**This AKS module contain the following resources:**
+- Azure Kubernetes Cluster
+- Azure Container Registry 
+- Helm chart for Nginx ingress controller
+- Helm chart for Cert Manager
 
-This module needs as prerequiste an already creadted resource group.
+**This module needs as prerequiste an already creadted resource group.**
 
 The following variables are mandatory to be filled in:
-    module "AKS-module" {
 
+```
   resource-group-name = "<name of resource group created>"
   source         = "<path to module>"      
 
@@ -34,4 +34,6 @@ The following variables are mandatory to be filled in:
 
   acr-name = "<name of Azure Container Registry>"
   acr-sku  = "<ACR tier (i.e. Basic)>"
-}
+```
+
+

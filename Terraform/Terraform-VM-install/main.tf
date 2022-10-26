@@ -1,17 +1,5 @@
-terraform {
-    required_providers {
-      azurerm = {
-        source = "hashicorp/azurerm"
-        version = "3.26.0"
-      }
-    }
-} 
 
-provider "azurerm" {
-    features {}
-}
-
-resource "azurerm_resource_group" "robert_gr" {
+resource "azurerm_resource_group" "test" {
     name     = "robert-day1"
     location = "East US"
     tags = {
@@ -19,10 +7,10 @@ resource "azurerm_resource_group" "robert_gr" {
     }
 }
 
-resource "azurerm_virtual_network" "robert_vnw" {
+resource "azurerm_virtual_network" "test" {
     name = "robert_vnw"
-    resource_group_name = azurerm_resource_group.robert_gr.name
-    location            = azurerm_resource_group.robert_gr.location
+    resource_group_name = azurerm_resource_group.test.name
+    location            = azurerm_resource_group.test.location
     address_space       = ["10.123.0.0/16"]
 
      tags = {
@@ -30,25 +18,25 @@ resource "azurerm_virtual_network" "robert_vnw" {
     }
 }
 
-resource "azurerm_subnet" "robert_sbnw" {
+resource "azurerm_subnet" "test" {
   name = "robert_sbnw"
-  resource_group_name  = azurerm_resource_group.robert_gr.name
-  virtual_network_name = azurerm_virtual_network.robert_vnw.name
+  resource_group_name  = azurerm_resource_group.test.name
+  virtual_network_name = azurerm_virtual_network.test.name
   address_prefixes = ["10.123.1.0/24"]
 
 }
 
-resource "azurerm_network_security_group" "robert_secgr" {
+resource "azurerm_network_security_group" "test" {
     name = "robert_secgr"
-    location            = azurerm_resource_group.robert_gr.location
-    resource_group_name = azurerm_resource_group.robert_gr.name
+    location            = azurerm_resource_group.test.location
+    resource_group_name = azurerm_resource_group.test.name
     tags = {
         environment = "learn"
     }
   
 }
 
-resource "azurerm_network_security_rule" "robert_secrule" {
+resource "azurerm_network_security_rule" "test" {
     name                        = "robert_secrule"
     priority                    = 100
     direction                   = "Inbound"
@@ -58,51 +46,51 @@ resource "azurerm_network_security_rule" "robert_secrule" {
     destination_port_range      = "*"
     source_address_prefix       = "*"
     destination_address_prefix  = "*"
-    resource_group_name         = azurerm_resource_group.robert_gr.name
-    network_security_group_name = azurerm_network_security_group.robert_secgr.name
+    resource_group_name         = azurerm_resource_group.test.name
+    network_security_group_name = azurerm_network_security_group.test.name
 
   
 }
 
-resource "azurerm_subnet_network_security_group_association" "robert_secgras" {
-    subnet_id              = azurerm_subnet.robert_sbnw.id
-    network_security_group_id = azurerm_network_security_group.robert_secgr.id
+resource "azurerm_subnet_network_security_group_association" "test" {
+    subnet_id              = azurerm_subnet.test.id
+    network_security_group_id = azurerm_network_security_group.test.id
   
 }
 
-resource "azurerm_public_ip" "robert_ip" {
+resource "azurerm_public_ip" "test" {
     name                = "robert_ip"
-    resource_group_name = azurerm_resource_group.robert_gr.name
-    location            = azurerm_network_security_group.robert_secgr.location
+    resource_group_name = azurerm_resource_group.test.name
+    location            = azurerm_network_security_group.test.location
     allocation_method   = "Dynamic"
     tags = {
         environment = "learn"
     }
 }
 
-resource "azurerm_network_interface" "robert_nic" {
+resource "azurerm_network_interface" "test" {
     name                = "robert_nic"
-    location            = azurerm_resource_group.robert_gr.location
-    resource_group_name = azurerm_resource_group.robert_gr.name
+    location            = azurerm_resource_group.test.location
+    resource_group_name = azurerm_resource_group.test.name
 
     ip_configuration {
         name                          = "internal"
-        subnet_id                     = azurerm_subnet.robert_sbnw.id
+        subnet_id                     = azurerm_subnet.test.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = azurerm_public_ip.robert_ip.id
+        public_ip_address_id          = azurerm_public_ip.test.id
     }
      tags = {
         environment = "learn"
     }
 }
 
-resource "azurerm_linux_virtual_machine" "robert_vm" {
+resource "azurerm_linux_virtual_machine" "test" {
   name                  = "robert-vm"
-  resource_group_name   = azurerm_resource_group.robert_gr.name
-  location              = azurerm_resource_group.robert_gr.location
+  resource_group_name   = azurerm_resource_group.test.name
+  location              = azurerm_resource_group.test.location
   size                  = "Standard_D2s_v3"
   admin_username        = "robert"
-  network_interface_ids = [azurerm_network_interface.robert_nic.id]
+  network_interface_ids = [azurerm_network_interface.test.id]
 
   custom_data           = filebase64("customdata.sh")
 
@@ -130,13 +118,15 @@ resource "azurerm_linux_virtual_machine" "robert_vm" {
  
 }
 
-data "azurerm_public_ip" "robert_ip-data" {
-    name                = azurerm_public_ip.robert_ip.name
-    resource_group_name = azurerm_resource_group.robert_gr.name
+data "azurerm_public_ip" "test" {
+    name                = azurerm_public_ip.test.name
+    resource_group_name = azurerm_resource_group.test.name
   
 }
 
+//save the public ip in output -> ip_address is the variable name from tfstate
+// terraform output -> shows the public_ip_address output result
 output "public_ip_address" {
-    value = "${azurerm_linux_virtual_machine.robert_vm.name}: ${data.azurerm_public_ip.robert_ip-data.ip_address}"
+    value = "${azurerm_linux_virtual_machine.test.name}: ${data.azurerm_public_ip.test.ip_address}"
   
 }

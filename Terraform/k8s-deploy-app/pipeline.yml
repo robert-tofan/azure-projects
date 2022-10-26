@@ -1,0 +1,65 @@
+# Starter pipeline
+
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+
+# Add steps that build, run tests, deploy, and more:
+
+# https://aka.ms/yaml
+
+
+
+# trigger:
+
+# - main
+
+pool:
+
+   name: hosted-pool
+
+
+steps:
+
+- script: |
+    cd
+    dir
+    docker build -t robert260398.azurecr.io/hello:latest .
+  displayName: 'Build image'
+
+- script: |
+    az acr login --name robert260398.azurecr.io
+  displayName: 'login to acr'
+
+- script: |    
+    docker push robert260398.azurecr.io/hello:latest
+  displayName: 'Push image to ACR'
+
+- script: |
+    az aks get-credentials --resource-group robert-project --name robert-kube --overwrite-existing
+
+  displayName: 'login to aks'  
+
+- script: |
+    az aks update -n robert-kube -g robert-project --attach-acr robert260398
+
+  displayName: 'integrate kube with acr'  
+
+- script: |
+    kubectl create namespace myapp
+
+  displayName: 'create namespace'  
+
+- script: |
+
+    kubectl apply -f hello.yml
+  
+  displayName: 'Deploy to Kubernetes'
+
+- script: |
+    docker images
+
+  displayName: 'list images'  
+
+- script: |    
+    kubectl get pods -n myapp
+    
+  displayName: 'list pods'  

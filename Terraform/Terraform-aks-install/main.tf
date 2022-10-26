@@ -1,17 +1,17 @@
-resource "azurerm_resource_group" "robert-aks" {
-  name     = "robert-aks"
-  location = "East US"
+resource "azurerm_resource_group" "test" {
+  name     = var.resource_group_name
+  location = var.location
 }
 
-resource "azurerm_kubernetes_cluster" "robert-kube" {
-  name                = "robert-kube"
-  location            = azurerm_resource_group.robert-aks.location
-  resource_group_name = azurerm_resource_group.robert-aks.name
+resource "azurerm_kubernetes_cluster" "test" {
+  name                = var.aks_name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   dns_prefix          = "test-prefix"
 
   default_node_pool {
     name       = "default"
-    node_count = 1
+    node_count = var.node_number
     vm_size    = "Standard_B2s"
   }
 

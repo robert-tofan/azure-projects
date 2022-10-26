@@ -1,13 +1,13 @@
 
-resource "azurerm_resource_group" "robert-database" {
+resource "azurerm_resource_group" "test" {
   name     = "robert-database"
   location = "East US"
 }
 
-resource "azurerm_mysql_server" "robert-mysql" {
+resource "azurerm_mysql_server" "test" {
   name                = "robert-mysql"
-  location            = azurerm_resource_group.robert-database.location
-  resource_group_name = azurerm_resource_group.robert-database.name
+  location            = azurerm_resource_group.test.location
+  resource_group_name = azurerm_resource_group.test.name
 
   administrator_login          = "robert"
   administrator_login_password = "12345qwe!"
@@ -25,18 +25,18 @@ resource "azurerm_mysql_server" "robert-mysql" {
   ssl_minimal_tls_version_enforced  = "TLS1_0"
 }
 
-resource "azurerm_mysql_database" "test-azurerm_mysql_database" {
+resource "azurerm_mysql_database" "test" {
   name                = "test-db"
-  resource_group_name = azurerm_resource_group.robert-database.name
-  server_name         = azurerm_mysql_server.robert-mysql.name
+  resource_group_name = azurerm_resource_group.test.name
+  server_name         = azurerm_mysql_server.test.name
   charset             = "utf8"
   collation           = "utf8_unicode_ci"
 }
 
-resource "azurerm_mysql_firewall_rule" "mysql-firewall" {
+resource "azurerm_mysql_firewall_rule" "test" {
   name                = "firewall-rule"
-  resource_group_name = azurerm_resource_group.robert-database.name
-  server_name         = azurerm_mysql_server.robert-mysql.name
+  resource_group_name = azurerm_resource_group.test.name
+  server_name         = azurerm_mysql_server.test.name
   start_ip_address    = "86.120.48.159"
   end_ip_address      = "86.120.48.159"
 }

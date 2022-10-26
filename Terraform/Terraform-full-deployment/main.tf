@@ -1,5 +1,4 @@
-resource "azurerm_kubernetes_cluster" "robert-kube" {
-  //count               = var.if-aks ? 1 : 0
+resource "azurerm_kubernetes_cluster" "test" {
   name                = var.aks-name
   location            = data.azurerm_resource_group.robert-project.location
   resource_group_name = data.azurerm_resource_group.robert-project.name
@@ -47,7 +46,7 @@ resource "helm_release" "cert_manager" {
   }
 } // End of cert manager
 
-resource "azurerm_mysql_server" "robert-mysql" {
+resource "azurerm_mysql_server" "test" {
   count               = var.if-mysql ? 1 : 0
   name                = var.mysql-name
   location            = data.azurerm_resource_group.robert-project.location
@@ -74,7 +73,7 @@ resource "azurerm_mysql_server" "robert-mysql" {
 
 } // End of MySql resource
 
-resource "azurerm_mysql_database" "test-azurerm_mysql_database" {
+resource "azurerm_mysql_database" "test" {
 
   count               = var.if-mysql-db ? 1 : 0
   name                = "test-db"
@@ -85,7 +84,7 @@ resource "azurerm_mysql_database" "test-azurerm_mysql_database" {
 
 } // End of mysql database resource
 
-resource "azurerm_mysql_firewall_rule" "mysql-firewall" {
+resource "azurerm_mysql_firewall_rule" "test" {
 
   count               = var.if-firewall ? 1 : 0
   name                = "firewall-rule"
@@ -96,7 +95,7 @@ resource "azurerm_mysql_firewall_rule" "mysql-firewall" {
 
 } // End of firewall resource
 
-resource "azurerm_container_registry" "robert-acr" {
+resource "azurerm_container_registry" "test" {
   count               = var.if-acr ? 1 : 0
   name                = var.acr-name
   resource_group_name = data.azurerm_resource_group.robert-project.name
@@ -107,8 +106,7 @@ resource "azurerm_container_registry" "robert-acr" {
 
 } // End of ACR resource
 
-resource "azurerm_public_ip" "robert-public-ip" {
-  //count               = var.if-public-ip ? 1 : 0
+resource "azurerm_public_ip" "test" {
   name                = "robert-public-ip"
   resource_group_name = data.azurerm_resource_group.robert-project.name
   location            = data.azurerm_resource_group.robert-project.location
@@ -119,19 +117,17 @@ resource "azurerm_public_ip" "robert-public-ip" {
   }
 } // End of public ip resource
 
-resource "azurerm_dns_zone" "robert-dns-zone" {
+resource "azurerm_dns_zone" "test" {
 
-  //count               = var.if-dns-zone ? 1 : 0
   name                = "robert.com"
   resource_group_name = data.azurerm_resource_group.robert-project.name
 
 } // End of DNS zone resource
 
-resource "azurerm_dns_a_record" "a-record" {
+resource "azurerm_dns_a_record" "test" {
 
-  //count               = var.if-dns-a-record ? 1 : 0
   name                = "robert-a-record"
-  zone_name           = azurerm_dns_zone.robert-dns-zone.name
+  zone_name           = azurerm_dns_zone.test.name
   resource_group_name = data.azurerm_resource_group.robert-project.name
   ttl                 = 300
   target_resource_id  = data.azurerm_public_ip.public-ip.id

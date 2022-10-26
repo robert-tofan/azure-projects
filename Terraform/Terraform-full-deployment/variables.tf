@@ -1,13 +1,6 @@
 
 // AKS varibles
 
-variable "if-aks" {
-
-  type        = bool
-  default     = true
-  description = "if true aks will be created"
-
-}
 
 variable "aks-name" {
 
@@ -113,36 +106,9 @@ variable "acr-sku" {
   default = "Basic"
 }
 
-// public ip varibles
-
-variable "if-public-ip" {
-
-  type        = bool
-  default     = true
-  description = "if true public ip will be created"
-
-}
-
-// DNS zone variables
-
-
-variable "if-dns-zone" {
-
-  type        = bool
-  default     = true
-  description = "if true dns zone will be created"
-
-}
 
 // DNS a recorder variables 
 
-variable "if-dns-a-record" {
-
-  type        = bool
-  default     = true
-  description = "if true dns a recorder will be created"
-
-}
 
 variable "default_tags" {
   type    = string
